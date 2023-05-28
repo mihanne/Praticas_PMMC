@@ -8,6 +8,7 @@ Original file is located at
 """
 
 from PIL import Image
+import random
 
 def to_binary(value):
     binary = ""
@@ -16,10 +17,16 @@ def to_binary(value):
         value = value // 2
     return binary.zfill(8)
 
-def cellular_automaton(rule, width, height):
+
+def cellular_automaton(rule, width, height, random_initial_state=False):
     # Inicialização da matriz do autômato celular
     automaton = [[0] * width]
-    automaton[0][width // 2] = 1  # Definindo a célula central como 1
+
+    # Definindo o estado inicial
+    if random_initial_state:
+        automaton[0] = [random.choice([0, 1]) for _ in range(width)]
+    else:
+        automaton[0][width // 2] = 1  # Definindo a célula central como 1
 
     # Definição das regras
     ruleset = to_binary(rule)
@@ -68,6 +75,15 @@ def cellular_automaton(rule, width, height):
 L = 80
 H = 100
 rule = int(input("Digite o número da regra (0-255): "))
+initial_state_choice = input("Escolha o estado inicial (o - ocupado, r - aleatório): ")
+
+# Convertendo a escolha do estado inicial para um valor booleano
+random_initial_state = False
+if initial_state_choice.lower() == "r":
+    random_initial_state = True
 
 # Executando o autômato celular
-cellular_automaton(rule, L, H)
+cellular_automaton(rule, L, H, random_initial_state)
+
+
+
